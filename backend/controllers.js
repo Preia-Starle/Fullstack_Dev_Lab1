@@ -71,4 +71,21 @@ const updateDish = async(req, res) => {
     }
 };
 
-module.exports = {getAllDishes, getDishByName, addDish, updateDish};
+const deleteDish = async (req, res) => {
+    try {
+        const {id} = req.params;
+        //delete dish by id
+        const deletedDish = await Dish.findByIdAndDelete(id);
+        //if not found return error 404
+        if(!deletedDish) {
+            return res.status(404).json({ message:'Dish not found :(.' });
+        }
+        res.status(200).json({ message: 'Dish deleted successfully.' });
+    }
+    catch (err) {
+        console.error('Error deleting the dish: ', err);
+        res.status(500).json({ message: 'Server error', error: err });
+    }
+};
+
+module.exports = {getAllDishes, getDishByName, addDish, updateDish, deleteDish};
