@@ -53,4 +53,22 @@ const addDish = async (req, res) => {
     }
 };
 
-module.exports = {getAllDishes, getDishByName, addDish};
+//update dish based on id
+const updateDish = async(req, res) => {
+    try {
+        const {id} = req.params;
+        //find by id
+        const updatedDish = await Dish.findByIdAndUpdate(id, req.body, {new: true});
+        //if it does not exist - id not found
+        if (!updatedDish) {
+            return res.status(404).json({ message:'Dish not found :(.' });
+        }
+        //return ok with the updated dish
+        res.status(200).json(updatedDish);
+    } catch (err) {
+        console.error('Error updating dish: ', err);
+        res.status(500).json({ message: 'Server error', error: err });
+    }
+};
+
+module.exports = {getAllDishes, getDishByName, addDish, updateDish};
