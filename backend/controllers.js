@@ -16,4 +16,20 @@ const getAllDishes = async (req, res) => {
     }
 };
 
-module.exports = {getAllDishes};
+//get dish by name
+const getDishByName = async (req, res) => {
+    try {
+        const {name} = req.params;
+        const dish = await Dish.findOne({name: name});
+        console.log('Fetched dish:', dish); 
+        if (!dish) {
+            return res.status(404).json({message: 'Dish not found :(.'})
+        }
+        res.status(200).json(dish);
+    } catch (err) {
+        console.error('Error fetching dish', err);
+        res.status(500).json({message: 'Server errror', error: err});
+    }
+};
+
+module.exports = {getAllDishes, getDishByName};
