@@ -32,4 +32,25 @@ const getDishByName = async (req, res) => {
     }
 };
 
-module.exports = {getAllDishes, getDishByName};
+//add new dish to database
+const addDish = async (req, res) => {
+    try {
+        const {name} = req.body;
+        //retrieve from db
+        const existingDish = await Dish.findOne({name: name});
+        //check if exists
+        if (existingDish) {
+            return res.status(409).json({message: 'Dish already exists.'});
+        }
+        //save if it does not exist
+        const newDish = new Dish(req.body);
+        await newDish.save();
+        //return the dish with status code
+        res.status(201).json(newDish);
+    } catch (err) {
+        console.error('Error adding dish: ', err);
+        res.status(500).json({message: 'Server error', error: err});
+    }
+};
+
+module.exports = {getAllDishes, getDishByName, addDish};
