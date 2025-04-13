@@ -71,6 +71,26 @@ const updateDish = async(req, res) => {
     }
 };
 
+//get dish by ID
+const getDishById = async (req, res) => {
+    try {
+        const {id} = req.params;
+        console.log('Fetching dish with ID:', req.params.id);
+        //check if the id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid dish ID format' });
+        }
+        const dish = await Dish.findById(id);
+        if (!dish) {
+            return res.status(404).json({message: 'Dish not found'});
+        }
+        res.status(200).json(dish);
+    } catch (err) {
+        console.error('Error fetching dish by ID:', err);
+        res.status(500).json({message: 'Server error', error: err});
+    }
+};
+
 const deleteDish = async (req, res) => {
     try {
         const {id} = req.params;
@@ -88,4 +108,4 @@ const deleteDish = async (req, res) => {
     }
 };
 
-module.exports = {getAllDishes, getDishByName, addDish, updateDish, deleteDish};
+module.exports = {getAllDishes, getDishByName, getDishById, addDish, updateDish, deleteDish};
