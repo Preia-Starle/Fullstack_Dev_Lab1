@@ -1,0 +1,8 @@
+.dishes-div {
+    border-spacing: 1rem;
+    border: 0.3rem solid black;
+}
+
+#add-dish-btn {
+    margin-top: 1rem;
+}

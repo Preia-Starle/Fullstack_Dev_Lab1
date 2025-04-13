@@ -2,10 +2,10 @@ const Dish = require ('./models');
 
 //get all dishes
 const getAllDishes = async (req, res) => {
-    console.log('GET /api/dishes route hit');
+    //console.log('GET /api/dishes route hit');
     try {
         const dishes = await Dish.find();
-        console.log('Fetched dishes:', dishes); 
+        //console.log('Fetched dishes:', dishes); 
         if (!dishes || dishes.length === 0) {
             console.log('No dishes found');
             return res.status(404).json({ message: 'No dishes found' });  
