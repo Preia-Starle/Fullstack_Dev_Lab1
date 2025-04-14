@@ -34,24 +34,40 @@ async function createDish(newDishData) {
 //fetch dish by id
 async function fetchDishById(dishId) {
     try {
+        console.log(`Fetching dish with ID: ${dishId}`);
         const response = await fetch(`http://localhost:3001/api/dishes/${dishId}`);
-        console.log(`Response Status: ${response.status}`); 
-
-        if (!response.ok) throw new Error('Failed to fetch dish');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch dish');
+        }
 
         const dish = await response.json();
         console.log('Fetched dish:', dish);
-
-        document.getElementById('name').value = dish.name;
-        document.getElementById('ingredients').value = dish.ingredients.join(', ');
-        document.getElementById('preparationSteps').value = dish.preparationSteps.join(', ');
-        document.getElementById('cookingTime').value = dish.cookingTime;
-        document.getElementById('origin').value = dish.origin;
-        document.getElementById('spiceLevel').value = dish.spiceLevel;
-        document.getElementById('servings').value = dish.servings;
-        document.getElementById('dish-id').value = dish._id;
+        
+        return dish;  //return the fetched dish object
     } catch (error) {
         console.error('Error fetching dish:', error);
+        return null;  //return null if there was an error
+    }
+}
+
+//fetch dish by name
+async function fetchDishByName(dishName) {
+    try {
+        console.log(`Fetching dish with name: ${dishName}`);
+        const response = await fetch(`http://localhost:3001/api/dishes/${dishName}`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch dish');
+        }
+
+        const dish = await response.json();
+        console.log('Fetched dish:', dish);
+        
+        return dish;  //return the fetched dish object
+    } catch (error) {
+        console.error('Error fetching dish:', error);
+        return null;  //return null if there was an error
     }
 }
 

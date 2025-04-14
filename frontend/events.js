@@ -16,15 +16,12 @@ async function attachAddDishEventListener() {
     }
 }
 
-async function attachFormEventListener(dishId = null) {
+async function attachFormEventListener(dishName) {
     const dishForm = document.getElementById('dish-form');
     if (dishForm) {
         dishForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            //get the dishId from the hidden input field
-            //const dishId = document.getElementById('dish-id').value;
-            
+
             const newDish = {
                 name: document.getElementById('name').value,
                 ingredients: document.getElementById('ingredients').value.split(','),
@@ -35,24 +32,29 @@ async function attachFormEventListener(dishId = null) {
                 servings: document.getElementById('servings').value,
             };
 
-            if (dishId) {
-                //update dish
-                newDish._id = dishId;
-                const updatedDish = await updateDish(newDish);
-                if (updatedDish) {
-                    console.log("Dish updated:", updatedDish);
-                    renderDishes();
-                    document.getElementById('form-container').innerHTML = '';  
+            //if dishName is passed, fetch the dish ID and update
+            if (dishName) {
+                const dish = await fetchDishByName(dishName);
+                if (dish) {
+                    newDish._id = dish._id;  
+                    const updatedDish = await updateDish(newDish);
+                    if (updatedDish) {
+                        console.log("Dish updated:", updatedDish);
+                        renderDishes();  //re-render dishes after update
+                        document.getElementById('form-container').innerHTML = '';  // Clear form
+                    } else {
+                        console.error("Failed to update dish");
+                    }
                 } else {
-                    console.error("Failed to update dish");
+                    console.error('Dish not found for update');
                 }
             } else {
-                //create dish
+                //create new dish if no dishName provided
                 const createdDish = await createDish(newDish);
                 if (createdDish) {
                     console.log("Dish created:", createdDish);
-                    renderDishes();
-                    document.getElementById('form-container').innerHTML = '';  
+                    renderDishes();  //re-render dishes after creation
+                    document.getElementById('form-container').innerHTML = '';  // Clear form
                 } else {
                     console.error("Failed to create dish");
                 }
@@ -61,9 +63,9 @@ async function attachFormEventListener(dishId = null) {
     }
 }
 
-function attachUpdateButtonEventListener(updateButton, dishId) {
+function attachUpdateButtonEventListener(updateButton, dishName) {
     updateButton.addEventListener('click', () => {
-        console.log('Dish ID for update:', dishId); 
-        renderDishForm(dishId);  //pass the correct ID to the form
+        console.log('Dish Name for update:', dishName);
+        renderDishForm(dishName); 
     });
 }
