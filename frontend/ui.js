@@ -114,8 +114,18 @@ function createDishForm(dishName = null) {
     submitButton.classList.add('submit-btn');
     submitButton.textContent = 'Submit';
 
+    //close button
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.classList.add('close-btn');
+    closeButton.textContent = 'Close';
+    
+    closeButton.addEventListener('click', () => {
+        document.getElementById('form-container').innerHTML = '';  //clear the form container to "close" the form
+    });
+
     // Append all input fields to the form
-    form.append(dishIdInput, nameInput, ingredientsInput, prepStepsInput, cookingTimeInput, originInput, spiceLevelInput, servingsInput, submitButton);
+    form.append(dishIdInput, nameInput, ingredientsInput, prepStepsInput, cookingTimeInput, originInput, spiceLevelInput, servingsInput, submitButton, closeButton);
 
     return form;
 }
